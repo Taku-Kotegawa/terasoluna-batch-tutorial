@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.SmartValidator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * job02ジョブ実装
@@ -38,6 +39,11 @@ public class Job02Tasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution stepContribution, ChunkContext chunkContext) throws Exception {
+
+        int count_read   = 0;
+        int count_insert = 0;
+        int count_update = 0;
+        int count_skip   = 0;
 
         // DB操作時の例外発生の有無を記録する
         boolean hasDBAccessException = false;
@@ -70,18 +76,24 @@ public class Job02Tasklet implements Tasklet {
              */
             csvReader.open(chunkContext.getStepContext().getStepExecution().getExecutionContext());
             while ((csvLine = csvReader.read()) != null) {
+                count_read++;
                 Variable v = map(csvLine);
                 try {
-                    Variable current = variableRepository.selectByPrimaryKey(v.getId());
+                    Variable current = findByTypeAndCode(v.getType(),v.getCode());
                     if (current == null) {
                         v.setVersion(0L);
-                        variableRepository.insert(v);
+                        count_insert = count_insert + variableRepository.insert(v);
                     } else {
+                        v.setId(current.getId());
                         if (!v.equals(current)) {
+                            log.info(v.toString());
+                            log.info(current.toString());
                             v.setVersion(current.getVersion() + 1L);    // リポジトリ側で対処している場合は不要
                             v.setCreatedBy(current.getCreatedBy());     // リポジトリ側で対処している場合は不要
                             v.setCreatedDate(current.getCreatedDate()); // リポジトリ側で対処している場合は不要
-                            variableRepository.updateByPrimaryKeyWithBLOBs(v);
+                            count_update = count_update = variableRepository.updateByPrimaryKeyWithBLOBs(v);
+                        } else {
+                            count_skip++;
                         }
                     }
                 } catch (Exception e) {
@@ -98,6 +110,10 @@ public class Job02Tasklet implements Tasklet {
             csvReader.close();
         }
 
+        log.info("読込件数:    " + count_read);
+        log.info("挿入件数:    " + count_insert);
+        log.info("更新件数:    " + count_update);
+        log.info("スキップ件数: " + count_skip);
         log.info("End");
         return RepeatStatus.FINISHED;
     }
@@ -118,4 +134,18 @@ public class Job02Tasklet implements Tasklet {
         v.setLastModifiedBy(JOB_EXECUTOR);
         return v;
     }
+
+    private Variable findByTypeAndCode(String type, String code) {
+        VariableExample example = new VariableExample();
+        example.or().andTypeEqualTo(type).andCodeEqualTo(code);
+        List<Variable> list = variableRepository.selectByExampleWithBLOBs(example);
+
+        if (list.size()>0) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+
+    }
+
 }

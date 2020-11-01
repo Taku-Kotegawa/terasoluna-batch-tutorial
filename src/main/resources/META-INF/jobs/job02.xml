@@ -38,7 +38,7 @@
             <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
                 <property name="lineTokenizer">
                     <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
-                          p:names="id,status,statusLabel,type,code,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,date1,date2,date3,date4,date5,valint1,valint2,valint3,valint4,valint5,textarea,file1uuid,remark"
+                          p:names="status,statusLabel,type,code,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,date1,date2,date3,date4,date5,valint1,valint2,valint3,valint4,valint5,textarea,file1uuid,remark"
                           p:delimiter=","
                           p:quoteCharacter='"'/>
                 </property>

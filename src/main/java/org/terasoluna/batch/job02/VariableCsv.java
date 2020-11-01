@@ -14,9 +14,6 @@ import static org.terasoluna.batch.common.validation.ParseableType.TO_LONG;
 @Data
 public class VariableCsv {
 
-    @Parseable(value = TO_LONG)
-    private String id;
-
     @Parseable(value = TO_INT)
     @Pattern(regexp = "^[012]$")
     private String status;
