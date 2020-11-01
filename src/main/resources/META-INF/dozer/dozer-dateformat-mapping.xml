@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns="http://dozermapper.github.io/schema/bean-mapping"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://dozermapper.github.io/schema/bean-mapping http://dozermapper.github.io/schema/bean-mapping.xsd">
+
+    <mapping date-format="yyyy/MM/dd">
+        <class-a>org.terasoluna.batch.job02.VariableCsv</class-a>
+        <class-b>org.terasoluna.batch.job02.Variable</class-b>
+        <!-- Any custom field mapping xml would go here -->
+    </mapping>
+
+</mappings>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+             http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+             http://www.springframework.org/schema/batch https://www.springframework.org/schema/batch/spring-batch.xsd
+             http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+    <import resource="classpath:META-INF/spring/job-base-context.xml"/>
+
+    <context:component-scan base-package="org.terasoluna.batch.job02" />
+    <mybatis:scan           base-package="org.terasoluna.batch.job02" factory-ref="jobSqlSessionFactory"/>
+
+    <batch:job id="job02" job-repository="jobRepository">
+        <batch:step id="job02.step01">
+            <batch:tasklet transaction-manager="jobTransactionManager" ref="job02Tasklet"/>
+        </batch:step>
+    </batch:job>
+
+    <!-- 変数一覧カーソル読み -->
+<!--    <bean id="reader"-->
+<!--          class="org.mybatis.spring.batch.MyBatisCursorItemReader"-->
+<!--          p:queryId="org.terasoluna.batch.job02.VariableCustomRepository.cursor"-->
+<!--          p:sqlSessionFactory-ref="jobSqlSessionFactory"/>-->
+
+    <!-- CSVファイルリーダー -->
+    <bean id="csvReader"
+          class="org.springframework.batch.item.file.FlatFileItemReader" scope="step"
+          p:resource="file:#{jobParameters['inputFile']}"
+          p:encoding="UTF-8"
+          p:linesToSkip="1"
+          p:strict="true">
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+                <property name="lineTokenizer">
+                    <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer"
+                          p:names="id,status,statusLabel,type,code,value1,value2,value3,value4,value5,value6,value7,value8,value9,value10,date1,date2,date3,date4,date5,valint1,valint2,valint3,valint4,valint5,textarea,file1uuid,remark"
+                          p:delimiter=","
+                          p:quoteCharacter='"'/>
+                </property>
+                <property name="fieldSetMapper">
+                    <bean class="org.terasoluna.batch.common.mapper.NullBindBeanWrapperFieldSetMapper"
+                          p:targetType="org.terasoluna.batch.job02.VariableCsv"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+<!--    <bean id="writer" class="org.mybatis.spring.batch.MyBatisBatchItemWriter"-->
+<!--          p:statementId="org.terasoluna.batch.job02.VariableRepository.insert"-->
+<!--          p:sqlSessionTemplate-ref="batchModeSqlSessionTemplate"/>-->
+
+</beans>

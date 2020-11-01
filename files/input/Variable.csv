@@ -1,0 +1,9 @@
+ID,ステータス,ステータス,タイプ,コード,値1,値2,値3,値4,値5,値6,値7,値8,値9,値10,日付1,日付2,日付3,日付4,日付5,整数1,整数2,整数3,整数4,整数5,テキストエリア,ファイル1,備考
+2,0,,aVARIABLE_LABEL,aVARIABLE_LABBEL2,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,2110/11/10,2110/11/10,2110/11/10,2110/11/10,2110/11/10,11,12,13,14,15,1aaa,1bbb,"1ccc"
+a3,a1,,VARIABLE_LABEL,VARIABLE_LABBEL3,,,,,,,,,,,2010/11/12,,,,,,,,,,,,
+4,1,,VARIABLE_LABEL,VARIABLE_LABBEL4,,,,,,,,,,,2010/11/10,,,,,,,,,,,,
+5,1,,VARIABLE_LABEL,VARIABLE_LABBEL5,,,,,,,,,,,2010/11/10,2011/11/10,2012/11/10,2013/11/10,2014/11/10,,,,,,,,
+6,1,,VARIABLE_LABEL,VARIABLE_LABBEL6,,,,,,,,,,,,,,,,,,,,,,,
+7,1,,VARIABLE_LABEL,VARIABLE_LABBEL7,,,,,,,,,,,,,,,,,,,,,,,
+8,1,,VARIABLE_LABEL,VARIABLE_LABBEL8,,,,,,,,,,,,,,,,,,,,,,,
+9,1,,VARIABLE_LABEL,VARIABLE_LABBEL9,,,,,,,,,,,,,,,,,,,,,,,
